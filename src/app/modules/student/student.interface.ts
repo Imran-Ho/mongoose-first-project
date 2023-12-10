@@ -1,6 +1,8 @@
 // import { Schema, model, connect } from 'mongoose';
 
-export type Guardian = {
+import { Model, Types } from 'mongoose';
+
+export type TGuardian = {
   fatherName: string;
   fatherOccupation: string;
   fatherContactNo: string;
@@ -9,32 +11,55 @@ export type Guardian = {
   motherContactNo: string;
 };
 
-export type UserName = {
+export type TUserName = {
   firstName: string;
-  middleName: string;
+  middleName?: string;
   lastName: string;
 };
 
-export type LocalGuardian = {
+export type TLocalGuardian = {
   name: string;
   occupation: string;
   contact: string;
   address: string;
 };
 
-export type Student = {
+export type TStudent = {
   id: string;
-  name: UserName;
-  gender: 'male' | 'female';
-  dateOfBirth: string;
+  user: Types.ObjectId;
+  password: string;
+  name: TUserName;
+  gender: 'male' | 'female' | 'other';
+  dateOfBirth: Date;
   email: string;
   contactNo: string;
   emergencyContactNo: string;
   bloodGroup?: 'A+' | 'A-' | 'B+' | 'B-' | 'AB+' | 'AB-';
   presentAddress: string;
   parmanentAddress: string;
-  guardian: Guardian;
-  localGuardian: LocalGuardian;
-  profileImg: string;
-  isActive: 'Active' | 'blocked';
+  guardian: TGuardian;
+  localGuardian: TLocalGuardian;
+  profileImg?: string;
+  admissionSemester: Types.ObjectId;
+  academicDepartment: Types.ObjectId;
+  isDeleted: boolean;
 };
+
+// for creating static instance.
+export interface StudentModel extends Model<TStudent> {
+  // eslint-disable-next-line no-unused-vars
+  isUserExisting(id: string): Promise<TStudent | null>;
+}
+
+// creating custom instance.
+// to check the user is exixting or not
+
+// export type StudentMethods = {
+//   isUserExists(id: string): Promise<TStudent | null>;
+// };
+
+// export type StudentModel = Model<
+//   TStudent,
+//   Record<string, never>,
+//   StudentMethods
+// >;
